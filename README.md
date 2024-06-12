@@ -1,6 +1,7 @@
 # Local Password Manager
 
 A locally hosted password manager that works with Chrome and Edge browsers. This project includes a backend server for storing passwords securely and a browser extension for managing and autofilling passwords.
+For storing passwords it is using Sqlite.
 
 ## Features
 
@@ -17,21 +18,38 @@ A locally hosted password manager that works with Chrome and Edge browsers. This
 
 ### 1. Clone the Repository
 
-git clone https://github.com/yourusername/PASSWORD_MANAGER.git
-cd PASSWORD_MANAGER
+You can clone the repository to the Program Files directory on your C drive using one of the following methods:
+
+**Option 1: Using Git Bash (recommended)**
+
+Open Git Bash and run the following commands:
+- git clone https://github.com/M2BARH/PASSWORD_MANAGER.git
+- "C:\Program Files\PASSWORD_MANAGER"
+
+**Option 2: Download ZIP file**
+
+Click the "Code" dropdown button on the repository page and select "Download ZIP". Then, extract the ZIP file to the "C:\Program Files" directory. Rename the extracted folder to "PASSWORD_MANAGER".
+
+### 2. Replace the code on start_server.bat with the following code
+
+```
+@echo off
+cd "C:\Program Files\PASSWORD_MANAGER"
+start cmd /k "node index.js"
+```
 
 ### 2. Add to startup
 
 To run the server automatically on startup:
 
-- Press Win + R, type shell:startup, and press Enter.
-- Copy the start_server.bat file into the opened Startup folder.
+- Press Win + R, type `shell:startup`, and press Enter.
+- Copy the `start_server.bat` file from the cloned repository (`C:\Program Files\PASSWORD_MANAGER`) into the opened Startup folder.
 
 ### 3. Load the Extension in Chrome/Edge
 
-- Open your browser and navigate to chrome://extensions/ or edge://extensions/.
+- Open your browser and navigate to `chrome://extensions/` or `edge://extensions/`.
 - Enable "Developer mode" (usually at the top right corner).
-- Click "Load unpacked" and select the PASSWORD_MANAGER directory.
+- Click "Load unpacked" and select the `C:\Program Files\PASSWORD_MANAGER` directory.
 
 ## Usage
 
@@ -44,4 +62,4 @@ To run the server automatically on startup:
 - Click on the extension icon to open the popup.
 - Enter the site name in the "Retrieve Password" section.
 - Click the "Retrieve" button to display stored passwords.
-- Click on the displayed password to autofill it on the current page
+- Click on the displayed password to autofill it on the current page.
