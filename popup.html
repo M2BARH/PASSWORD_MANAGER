@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Password Manager</title>
     <link rel="stylesheet" href="./styles/popup.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
@@ -11,7 +15,10 @@
         <h2>Store Password</h2>
         <input id="site" placeholder="Site" />
         <input id="username" placeholder="Username" />
-        <input id="password" placeholder="Password" type="password" />
+        <div class="password-field">
+          <input id="password" placeholder="Password" type="password" />
+          <i id="toggle-icon" class="fa fa-eye-slash" style="display: none;"></i>
+        </div>
         <button id="store" class="btn">Store</button>
       </div>
       <div class="section">

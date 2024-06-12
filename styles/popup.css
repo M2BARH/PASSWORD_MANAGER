@@ -37,6 +37,18 @@ button {
   box-sizing: border-box;
 }
 
+.password-field {
+  position: relative;
+}
+
+#toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .btn {
   background-color: #4CAF50;
   color: #fff;

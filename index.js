@@ -11,7 +11,6 @@ const db = new sqlite3.Database(dbPath);
 
 app.use(bodyParser.json());
 
-// Initialize the database
 db.serialize(() => {
   db.run(
     "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)"
@@ -21,18 +20,15 @@ db.serialize(() => {
   );
 });
 
-// Helper function to encrypt passwords
 function encryptPassword(password) {
   return CryptoJS.AES.encrypt(password, "secret key").toString();
 }
 
-// Helper function to decrypt passwords
 function decryptPassword(encryptedPassword) {
   const bytes = CryptoJS.AES.decrypt(encryptedPassword, "secret key");
   return bytes.toString(CryptoJS.enc.Utf8);
 }
 
-// Register endpoint
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -49,7 +45,6 @@ app.post("/register", async (req, res) => {
   );
 });
 
-// Login endpoint
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -66,7 +61,6 @@ app.post("/login", async (req, res) => {
   );
 });
 
-// Store password endpoint
 app.post("/store-password", (req, res) => {
   const { user_id, site, username, password } = req.body;
   const encryptedPassword = encryptPassword(password);
@@ -83,7 +77,6 @@ app.post("/store-password", (req, res) => {
   );
 });
 
-// Retrieve password endpoint
 app.post("/get-password", (req, res) => {
   const { user_id, site } = req.body;
 
@@ -102,7 +95,7 @@ app.post("/get-password", (req, res) => {
 
       const results = rows.map((row) => {
         const decryptedPassword = decryptPassword(row.password);
-        return { username: row.username, password: decryptedPassword };
+        return { site: row.site, username: row.username, password: decryptedPassword };
       });
 
       res.status(200).send(results);
