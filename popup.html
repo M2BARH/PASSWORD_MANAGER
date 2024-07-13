@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Password Manager</title>
+    <title>Password Manager Extension</title>
     <link rel="stylesheet" href="./styles/popup.css" />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
   </head>
   <body>
     <div class="container">
@@ -31,5 +28,25 @@
       </div>
     </div>
     <script src="./scripts/popup.js"></script>
+  </body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alert Box</title>
+    <link href="../styles/alert.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="custom-alert" class="custom-alert">
+      <div id="custom-alert-content" class="custom-alert-content">
+        <span class="close-btn" onclick="closeCustomAlert()">&times;</span>
+        <p id="alert-message"></p>
+      </div>
+    </div>
+
+    <script src="../scripts/popup.js"></script>
   </body>
 </html>

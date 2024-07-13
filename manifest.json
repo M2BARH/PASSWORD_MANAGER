@@ -7,7 +7,7 @@
     "scripts": ["scripts/background.js"],
     "persistent": false
   },
-  "permissions": ["activeTab", "storage", "http://localhost:3000/"],
+  "permissions": ["activeTab", "storage", "http://localhost:3000/", "scripting"],
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {

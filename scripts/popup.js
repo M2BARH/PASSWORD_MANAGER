@@ -1,12 +1,9 @@
 const toggleIcon = document.getElementById("toggle-icon");
 const passwordField = document.getElementById("password");
 
-const isChrome =
-  navigator.userAgentData &&
-  navigator.userAgentData.brands &&
-  navigator.userAgentData.brands.some(
-    (brand) => brand.brand === "Google Chrome"
-  );
+const isChrome = navigator?.userAgentData?.brands?.some(
+  (brand) => brand.brand === "Google Chrome"
+);
 
 if (isChrome) {
   toggleIcon.style.display = "inline";
@@ -33,7 +30,6 @@ document.getElementById("store").addEventListener("click", () => {
     {
       action: "storePassword",
       data: {
-        user_id: 1, // Replace with actual user ID handling
         site,
         username,
         password,
@@ -41,35 +37,86 @@ document.getElementById("store").addEventListener("click", () => {
     },
     (response) => {
       if (response) {
-        alert("Password stored successfully");
+        alert(response.message || "Password stored successfully");
+      } else {
+        showCustomAlert(
+          "error",
+          "An error occurred while storing the password"
+        );
       }
     }
   );
 });
 
-document.getElementById("retrieve").addEventListener("click", () => {
+document.getElementById("retrieve").addEventListener("click", retrievePassword);
+
+document.getElementById("retrieve-site").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      retrievePassword();
+    }
+  });
+
+function retrievePassword() {
+  chrome.storage.local.get("user_id", async (result) => {
+    if (!result.user_id) {
+      const userId = chrome.tabs.create({ url: chrome.runtime.getURL("../html/login.html") });
+      if (userId) {
+        fetchPassword();
+      }
+    } else {
+      fetchPassword();
+    }
+  });
+}
+
+function fetchPassword() {
   const site = document.getElementById("retrieve-site").value;
 
   chrome.runtime.sendMessage(
     {
       action: "getPassword",
       data: {
-        user_id: 1, // Replace with actual user ID handling
         site,
       },
     },
     (response) => {
+      if (chrome.runtime.lastError) {
+        console.error("Runtime error:", chrome.runtime.lastError);
+        showCustomAlert(
+          "error",
+          "An error occurred while retrieving the password"
+        );
+        return;
+      }
+
+      if (response.error) {
+        showCustomAlert("error", response.error);
+        return;
+      }
+
       const passwordList = document.getElementById("password-list");
       passwordList.innerHTML = "";
 
       if (Array.isArray(response) && response.length > 0) {
         response.forEach((entry) => {
           const listItem = document.createElement("li");
-          listItem.innerText = `Site: ${entry.site} \n Username: ${entry.username} \n Password: ${entry.password}`;
+          listItem.innerHTML = `Site: ${entry.site} <br> Username: ${entry.username} <br> Password: ********** <button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button>`;
           listItem.addEventListener("click", () =>
             autofillPassword(entry.username, entry.password)
           );
           passwordList.appendChild(listItem);
+
+          listItem.querySelector(".edit-btn").addEventListener("click", () => {
+            editPassword(entry);
+          });
+
+          listItem
+            .querySelector(".delete-btn")
+            .addEventListener("click", () => {
+              if (confirm("Are you sure you want to delete this password?")) {
+                deletePassword(entry);
+              }
+            });
         });
       } else {
         const listItem = document.createElement("li");
@@ -78,7 +125,52 @@ document.getElementById("retrieve").addEventListener("click", () => {
       }
     }
   );
-});
+}
+
+function editPassword(entry) {
+  const newPassword = prompt("Enter new password:", entry.password);
+  if (newPassword && newPassword !== entry.password) {
+    chrome.runtime.sendMessage(
+      {
+        action: "editPassword",
+        data: {
+          site: entry.site,
+          username: entry.username,
+          newPassword,
+        },
+      },
+      (response) => {
+        if (response) {
+          showCustomAlert("success", "Password updated successfully");
+          retrievePassword();
+        }
+      }
+    );
+  }
+}
+
+function deletePassword(entry) {
+  chrome.runtime.sendMessage(
+    {
+      action: "deletePassword",
+      data: {
+        site: entry.site,
+        username: entry.username,
+      },
+    },
+    (response) => {
+      if (response) {
+        showCustomAlert("success", "Password deleted successfully");
+        retrievePassword();
+      }
+    }
+  );
+}
+
+function closeAndRemoveUser() {
+  window.close();
+  chrome.storage.local.remove("user_id");
+}
 
 function autofillPassword(username, password) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -88,4 +180,34 @@ function autofillPassword(username, password) {
       password,
     });
   });
+  closeAndRemoveUser();
+}
+
+function showCustomAlert(type, message) {
+  const alertBox = document.getElementById("custom-alert");
+  const alertContent = document.getElementById("custom-alert-content");
+  const alertMessage = document.getElementById("alert-message");
+
+  alertMessage.textContent = message;
+
+  alertContent.classList.remove("success", "error");
+  if (type === "success") {
+    alertContent.classList.add("success");
+  } else if (type === "error") {
+    alertContent.classList.add("error");
+  }
+
+  alertBox.style.display = "flex";
+  setTimeout(() => {
+    alertContent.classList.add("fade-out");
+    setTimeout(() => {
+      closeCustomAlert();
+      alertContent.classList.remove("fade-out");
+    }, 300);
+  }, 4000);
+}
+
+function closeCustomAlert() {
+  const alertBox = document.getElementById("custom-alert");
+  alertBox.style.display = "none";
 }
