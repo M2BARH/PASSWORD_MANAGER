@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('login_username').focus();
+});
+
 document.getElementById("login-btn").addEventListener("click", handleLogin);
 
 function loginUserFn() {

@@ -1,3 +1,34 @@
+document.addEventListener('DOMContentLoaded', function() {
+  const authButton = document.getElementById('auth-button');
+  const mainContent = document.getElementById('main-content');
+
+  function updateAuthButton() {
+    chrome.storage.local.get(['user_id'], function(result) {
+      if (result.user_id) {
+        authButton.textContent = 'Logout';
+        mainContent.style.display = 'block';
+      } else {
+        authButton.textContent = 'Login';
+        mainContent.style.display = 'none';
+      }
+    });
+  }
+
+  authButton.addEventListener('click', function() {
+    chrome.storage.local.get(['user_id'], function(result) {
+      if (result.user_id) {
+        chrome.storage.local.remove('user_id', function() {
+          updateAuthButton();
+        });
+      } else {
+        chrome.tabs.create({ url: chrome.runtime.getURL("../html/login.html") });
+      }
+    });
+  });
+
+  updateAuthButton();
+});
+
 const toggleIcon = document.getElementById("toggle-icon");
 const passwordField = document.getElementById("password");
 
@@ -22,31 +53,44 @@ if (isChrome) {
 }
 
 document.getElementById("store").addEventListener("click", () => {
+  chrome.storage.local.get("user_id", async (result) => {
+    if (!result.user_id) {
+      const userId = chrome.tabs.create({ url: chrome.runtime.getURL("../html/login.html") });
+      if (userId) {
+        storePassword();
+      }
+    } else {
+      storePassword();
+    }
+  });
+});
+
+function storePassword() {
   const site = document.getElementById("site").value;
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
   chrome.runtime.sendMessage(
-    {
-      action: "storePassword",
-      data: {
-        site,
-        username,
-        password,
+      {
+        action: "storePassword",
+        data: {
+          site,
+          username,
+          password,
+        },
       },
-    },
-    (response) => {
-      if (response) {
-        alert(response.message || "Password stored successfully");
-      } else {
-        showCustomAlert(
-          "error",
-          "An error occurred while storing the password"
-        );
+      (response) => {
+        if (response) {
+          alert(response.message || "Password stored successfully");
+        } else {
+          showCustomAlert(
+              "error",
+              "An error occurred while storing the password"
+          );
+        }
       }
-    }
   );
-});
+}
 
 document.getElementById("retrieve").addEventListener("click", retrievePassword);
 
@@ -182,6 +226,18 @@ function autofillPassword(username, password) {
   });
   closeAndRemoveUser();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const closeBtn = document.getElementById('closeBtn');
+
+  closeBtn.addEventListener('click', closeCustomAlert);
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeCustomAlert();
+    }
+  });
+});
 
 function showCustomAlert(type, message) {
   const alertBox = document.getElementById("custom-alert");

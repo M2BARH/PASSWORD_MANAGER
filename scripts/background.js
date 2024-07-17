@@ -152,10 +152,12 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    handleMessage(message, sender).then(sendResponse).catch(error => {
-        console.error("Error in handleMessage:", error);
-        sendResponse({error: error.message});
-    });
+    handleMessage(message, sender)
+        .then(sendResponse)
+        .catch(error => {
+            console.error("Error in handleMessage:", error);
+            sendResponse({error: error.message});
+        });
     return true;
 });
 

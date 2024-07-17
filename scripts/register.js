@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('reg_username').focus();
+});
+
 document.getElementById("register-btn").addEventListener("click", handleRegister);
 
 function registerUserFn() {
