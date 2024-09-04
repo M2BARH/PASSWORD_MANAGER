@@ -1,6 +1,6 @@
 body {
-  font-family: Arial, sans-serif;
-  padding: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
   background-color: #f5f5f5;
 }
 
@@ -13,7 +13,21 @@ body {
   padding: 20px;
 }
 
+.section-container {
+  background: #fff;
+  padding: 8px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
 .section {
+  margin: 20px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #eee;
   margin: 20px 0;
 }
 
@@ -23,21 +37,23 @@ h1 {
 }
 
 h2 {
-  margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 15px;
 }
 
 label {
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 input,
 button {
   display: block;
   width: 100%;
-  padding: 10px;
+  padding: 12px 15px;
   margin: 10px 0 6px;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 4px;
   box-sizing: border-box;
 }
 
@@ -54,14 +70,19 @@ button {
 }
 
 .btn {
-  background-color: #4CAF50;
+  background-color: #007bff;
   color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
 }
 
 .btn:hover {
-  background-color: #3e8e41;
+  transition: .3s ease;
+  background-color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .password-list-container {
@@ -70,6 +91,7 @@ button {
   border: 1px solid #ccc;
   border-radius: 3px;
   padding: 10px;
+  margin-top: 10px;
 }
 
 #password-list {
@@ -101,6 +123,20 @@ button {
   gap: 5px;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #0056b3;
+}
+
+
 .edit-btn,
 .delete-btn {
   padding: 5px 10px;
@@ -113,6 +149,7 @@ button {
 .edit-btn {
   background-color: #2196F3;
   color: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .edit-btn:hover {
@@ -120,12 +157,12 @@ button {
 }
 
 .delete-btn {
-  background-color: #f44336;
+  background-color: #a30909;
   color: #fff;
 }
 
 .delete-btn:hover {
-  background-color: #da190b;
+  background-color: #c00;
 }
 
 /* start of alert style */

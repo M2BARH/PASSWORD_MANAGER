@@ -10,26 +10,31 @@
     <h1>Password Manager</h1>
     <button id="auth-button" class="btn"></button>
     <div id="main-content" style="display: none;">
-        <div class="section">
-            <h2>Store Password</h2>
-            <label for="site">Site</label>
-            <input id="site" placeholder="Enter site"/>
-            <label for="username">Username</label>
-            <input id="username" placeholder="Enter username"/>
-            <div class="password-field">
-                <label for="password">Password</label>
-                <input id="password" placeholder="Enter password" type="password"/>
-                <i id="toggle-icon" class="fa fa-eye-slash" style="display: none;"></i>
+        <div class="section-container">
+            <div class="section">
+                <h2>Store Password</h2>
+                <label for="site">Site</label>
+                <input id="site" placeholder="Enter site"/>
+                <label for="username">Username</label>
+                <input id="username" placeholder="Enter username"/>
+                <div class="password-field">
+                    <label for="password">Password</label>
+                    <input id="password" placeholder="Enter password" type="password"/>
+                    <i id="toggle-icon" class="fa fa-eye-slash" style="display: none;"></i>
+                </div>
+                <button id="store" class="btn"><i class="fas fa-save"></i> Store</button>
             </div>
-            <button id="store" class="btn">Store</button>
         </div>
-        <div class="section">
-            <h2>Retrieve Password</h2>
-            <label for="retrieve-site">Site or Username</label>
-            <input id="retrieve-site" placeholder="Either the site or the username"/>
-            <button id="retrieve" class="btn">Retrieve</button>
-            <div class="password-list-container">
-                <ul id="password-list"></ul>
+        <hr>
+        <div class="section-container">
+            <div class="section">
+                <h2>Retrieve Password</h2>
+                <label for="retrieve-site">Site or Username</label>
+                <input id="retrieve-site" placeholder="Either the site or the username"/>
+                <button id="retrieve" class="btn"><i class="fas fa-search"></i> Retrieve</button>
+                <div class="password-list-container">
+                    <ul id="password-list"></ul>
+                </div>
             </div>
         </div>
     </div>

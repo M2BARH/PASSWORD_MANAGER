@@ -35,7 +35,7 @@ Click the "Code" dropdown button on the repository page and select "Download ZIP
 ```
 @echo off
 cd "C:\Program Files\PASSWORD_MANAGER"
-start cmd /k "node index.js"
+start /min /b node index.js
 ```
 
 ### 2. Add to startup
