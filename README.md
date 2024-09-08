@@ -33,9 +33,8 @@ Click the "Code" dropdown button on the repository page and select "Download ZIP
 ### 2. Replace the code on start_server.bat with the following code
 
 ```
-@echo off
-cd "C:\Program Files\PASSWORD_MANAGER"
-start /min /b node index.js
+Set WshShell = CreateObject("WScript.Shell")
+WshShell.Run "cmd /c cd C:\Program Files\PASSWORD_MANAGER && start /min /b node index.js", 0, False
 ```
 
 ### 2. Add to startup
@@ -43,7 +42,7 @@ start /min /b node index.js
 To run the server automatically on startup:
 
 - Press Win + R, type `shell:startup`, and press Enter.
-- Copy the `start_server.bat` file from the cloned repository (`C:\Program Files\PASSWORD_MANAGER`) into the opened Startup folder.
+- Copy the `start_server.vbs` file from the cloned repository (`C:\Program Files\PASSWORD_MANAGER`) into the opened Startup folder.
 
 ### 3. Load the Extension in Chrome/Edge
 

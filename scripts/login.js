@@ -28,20 +28,13 @@ function loginUserFn() {
                     showCustomAlert("error", "Failed to log in. \n\n" + response.error);
                     reject(new Error(response.error));
                 } else if (response.userId) {
-                    chrome.storage.local.set({ user_id: response.userId }, () => {
+                    chrome.storage.local.set({ user_id: response.userId, login_time: Date.now() }, () => {
                         showCustomAlert("success", "User logged in successfully!");
                         resolve(response.userId);
                         setTimeout(() => {
                             window.close();
                         }, 1500);
                     });
-
-                    const sessionDuration = 60 * 60 * 1000;
-                    setTimeout(() => {
-                        chrome.storage.local.remove('user_id', () => {
-                            console.log("Session has expired and user_id has been removed.");
-                        });
-                    }, sessionDuration);
                 } else {
                     console.error("Unexpected response:", response);
                     showCustomAlert("error", "Unexpected response from server.");

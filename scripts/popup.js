@@ -1,20 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
     const authButton = document.getElementById('auth-button');
     const mainContent = document.getElementById('main-content');
+    const sessionDuration = 60 * 60 * 1000; // 1 hour session duration
 
     function updateAuthButton() {
-        chrome.storage.local.get(['user_id'], function (result) {
-            if (result.user_id) {
+        chrome.storage.local.get(['user_id', 'login_time'], function (result) {
+            const currentTime = Date.now();
+
+            if (result.user_id && result.login_time && (currentTime - result.login_time < sessionDuration)) {
                 authButton.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
                 authButton.style.backgroundColor = '#a30909';
                 authButton.style.marginBottom = '8px';
-
                 mainContent.style.display = 'block';
             } else {
-                authButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-                authButton.style.backgroundColor = '#007bff';
-
-                mainContent.style.display = 'none';
+                chrome.storage.local.remove(['user_id', 'login_time'], function () {
+                    authButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                    authButton.style.backgroundColor = '#007bff';
+                    mainContent.style.display = 'none';
+                });
             }
         });
     }
@@ -22,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     authButton.addEventListener('click', function () {
         chrome.storage.local.get(['user_id'], function (result) {
             if (result.user_id) {
-                chrome.storage.local.remove('user_id', function () {
+                chrome.storage.local.remove(['user_id', 'login_time'], function () {
                     updateAuthButton();
                 });
             } else {
@@ -155,6 +158,8 @@ function fetchPassword() {
             passwordList.innerHTML = "";
 
             if (Array.isArray(response) && response.length > 0) {
+                document.querySelector('.password-list-container').style.display = 'block';
+
                 response.forEach((entry) => {
                     const listItem = document.createElement("li");
                     listItem.innerHTML = `Site: ${entry.site} <br> Username: ${entry.username} <br> Password: ********** <button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button>`;
